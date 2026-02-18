@@ -1,13 +1,37 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:11434/api/tags >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
   app:
     build: .
+    container_name: fastapi_app
     ports:
       - "8000:8000"
     volumes:
       - .:/app
     environment:
-      OPENAI_API_KEY: "your_openai_api_key_here"
       CHROMADB_TELEMETRY_ENABLED: "false"
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+      # Use this in your code as the base URL for Ollama
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      # If you still need OpenAI sometimes, keep it; otherwise remove it
+     
+    depends_on:
+      ollama:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  ollama_data:

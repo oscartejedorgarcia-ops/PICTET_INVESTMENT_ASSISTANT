@@ -15,7 +15,7 @@ easyocr==1.7.2
 Pillow>=10.0.0
 
 # ── Vector DB ────────────────────────────────────────────
-chromadb==0.6.4
+chromadb==0.6.3
 
 # ── Embeddings (open-source, local) ─────────────────────
 sentence-transformers>=3.0.0

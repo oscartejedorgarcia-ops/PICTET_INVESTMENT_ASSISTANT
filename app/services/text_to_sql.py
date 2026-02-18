@@ -21,11 +21,10 @@ generate a valid SQLite SELECT query that answers the user's question.
 
 Rules:
 - Return ONLY the SQL query, nothing else.
-- THE Company name is stored on the "company" column.
 - The query must be a SELECT statement (read-only).
 - Do NOT wrap the query in markdown code fences.
 - Use LIKE with % wildcards for partial string matching.
-- when searching for indsutry or sector the anwser could be aggregared  
+- there is only one table called "stocks" that contains all the data, so do not use any JOINs or table prefixes.
 - Column names are lowercase with underscores.
 - take into consideration that all columns belong to the same table called "stocks"
 - keywords like company name, sector, industry use the data extracted from the context and keep sensitive case.
@@ -72,15 +71,13 @@ def _build_context(question: str) -> str:
             for res in taxonomy_values
         ]
     )
-    logger.info("#####################111:")
+    
     # Combine contexts
     ctx = "Database Structure:\n" + db_structure_context + "\n\n"
     ctx += "additional context information:\n" + taxonomy_context + "\n"
 
-    #logger.debug("Combined Context: %s", ctx)
-
-    # Log the combined context before returning
-    logger.info("#####################Combined Context: %s", ctx)
+    
+    
     return ctx
 
 
