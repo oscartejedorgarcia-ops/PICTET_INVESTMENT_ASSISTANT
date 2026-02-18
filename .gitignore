@@ -20,7 +20,9 @@ env/
 .idea/
 
 # Data stores (regenerated at runtime)
-storage/
+#storage/
+#storage/chroma_db/
+
 
 # OS
 .DS_Store
