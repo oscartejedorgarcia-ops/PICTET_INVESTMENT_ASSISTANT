@@ -373,7 +373,7 @@ curl -s http://localhost:8000/api/health | python -m json.tool
 # Ask a question
 curl -s -X POST http://localhost:8000/api/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "What are the top 3 stocks by target price?"}' | python -m json.tool
+  -d '{"question": "What are the top 3 companies by price?"}' | python -m json.tool
 ```
 
 ---
@@ -431,3 +431,27 @@ curl -s -X POST http://localhost:8000/api/ask \
 - Document the ChromaDB collection schemas (what metadata fields each collection stores).
 - Add integration tests that spin up Ollama and exercise the full `/api/ask` round-trip.
 - Document the expected CSV/Excel column names (currently inferred dynamically — any schema works, but the taxonomy embedding step expects specific columns like `company`, `sector_-_level_1`, etc.).
+
+### Project Architecture
+
+```mermaid
+graph TD
+    A[User] -->|Sends Request| B[FastAPI Application]
+    B -->|Routes Requests| C[API Router]
+    C -->|Handles Endpoints| D[Health Check Endpoint]
+    C -->|Handles Endpoints| E[Ask Question Endpoint]
+    B -->|Loads Config| F[Configuration File]
+    B -->|Interacts With| G[SQLite Database]
+    B -->|Interacts With| H[ChromaDB]
+    H -->|Stores| I[Vectorized Documents]
+    G -->|Stores| J[Structured Stock Data]
+    B -->|Uses| K[Ollama Service]
+    K -->|Provides| L[LLM Responses]
+    subgraph Ingestion Pipeline
+        M[PDF Parser] --> N[Vector Store]
+        O[CSV Loader] --> P[SQLite Loader]
+    end
+    B -->|Runs| Ingestion Pipeline
+```
+
+This diagram provides an overview of the project's architecture, including the FastAPI application, its endpoints, and the services it interacts with.
