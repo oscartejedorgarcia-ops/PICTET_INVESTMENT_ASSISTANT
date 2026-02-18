@@ -376,6 +376,28 @@ curl -s -X POST http://localhost:8000/api/ask \
   -d '{"question": "What are the top 3 companies by price?"}' | python -m json.tool
 ```
 
+
+---
+
+## Refresh Assumptions
+
+### Assumptions made
+
+1. **`.env.example` is empty** — the file exists but contains no content. The variables documented above are inferred from `app/config.py` and `app/ingestion/config.py`.
+2. **Default structured data file is `equities.xlsx`** — `app/config.py` sets `csv_path` to `data/structured/equities.xlsx`, not `data/stocks.csv` as the original README stated.
+3. **Ollama, not OpenAI** — `app/config.py` sets `ollama_base_url` and `app/services/llm.py` uses `api_key="unused"`. The `openai` Python package is used only as an HTTP client for the Ollama-compatible API.
+4. **Five ChromaDB collections total** — `ingest_text`, `ingest_tables`, `ingest_figures` (PDF pipeline) + `stocks_db_structure`, `stocks_taxonomy` (CSV pipeline). The original README mentioned 3.
+5. **Default DPI is 100**, not 200 as previously documented (`app/ingestion/config.py`).
+6. **Default chunk size is 450 chars / 50 overlap**, not 800/200 as previously documented.
+
+### Recommended improvements
+
+- Formalize the structured-data pipeline: Move from direct table loads to a governed flow (staging → ETL → datamart) to improve data quality, traceability, and scalability.
+- Optimize unstructured ingestion throughput: Vector graphics extraction is currently disabled to speed processing; reassess and re-enable selectively where it adds value.
+- Benchmark document-processing options: Run performance vs. quality comparisons across alternative PDF tools (e.g., Docling, Camelot) to choose the best stack for your document types.
+- Adopt task-specialized LLMs: Use different models for different tasks (e.g., SQL generation, summarization, routing) instead of relying only on Llama 3.2.
+- Refactor for maintainability: Reduce unnecessary logging, improve module reusability, and tighten documentation/comments for cleaner long-term evolution.
+
 ---
 
 ## Implementation Validation Map
@@ -411,47 +433,3 @@ curl -s -X POST http://localhost:8000/api/ask \
 | MPS acceleration for embeddings | `app/ingestion/embeddings.py` → `_mps_available()`, `device="mps"` | ✅ Verified |
 | Entity extraction via LLM at query time | Not implemented as a separate module | ⚠️ Not found — entities extracted implicitly via LLM prompt context |
 
----
-
-## Refresh Assumptions
-
-### Assumptions made
-
-1. **`.env.example` is empty** — the file exists but contains no content. The variables documented above are inferred from `app/config.py` and `app/ingestion/config.py`.
-2. **Default structured data file is `equities.xlsx`** — `app/config.py` sets `csv_path` to `data/structured/equities.xlsx`, not `data/stocks.csv` as the original README stated.
-3. **Ollama, not OpenAI** — `app/config.py` sets `ollama_base_url` and `app/services/llm.py` uses `api_key="unused"`. The `openai` Python package is used only as an HTTP client for the Ollama-compatible API.
-4. **Five ChromaDB collections total** — `ingest_text`, `ingest_tables`, `ingest_figures` (PDF pipeline) + `stocks_db_structure`, `stocks_taxonomy` (CSV pipeline). The original README mentioned 3.
-5. **Default DPI is 100**, not 200 as previously documented (`app/ingestion/config.py`).
-6. **Default chunk size is 450 chars / 50 overlap**, not 800/200 as previously documented.
-
-### Recommended documentation improvements
-
-- Populate `.env.example` with the variables listed in section 7.4.
-- Add an `ARCHITECTURE.md` with Mermaid diagrams for the ingestion and query flows.
-- Document the ChromaDB collection schemas (what metadata fields each collection stores).
-- Add integration tests that spin up Ollama and exercise the full `/api/ask` round-trip.
-- Document the expected CSV/Excel column names (currently inferred dynamically — any schema works, but the taxonomy embedding step expects specific columns like `company`, `sector_-_level_1`, etc.).
-
-### Project Architecture
-
-```mermaid
-graph TD
-    A[User] -->|Sends Request| B[FastAPI Application]
-    B -->|Routes Requests| C[API Router]
-    C -->|Handles Endpoints| D[Health Check Endpoint]
-    C -->|Handles Endpoints| E[Ask Question Endpoint]
-    B -->|Loads Config| F[Configuration File]
-    B -->|Interacts With| G[SQLite Database]
-    B -->|Interacts With| H[ChromaDB]
-    H -->|Stores| I[Vectorized Documents]
-    G -->|Stores| J[Structured Stock Data]
-    B -->|Uses| K[Ollama Service]
-    K -->|Provides| L[LLM Responses]
-    subgraph Ingestion Pipeline
-        M[PDF Parser] --> N[Vector Store]
-        O[CSV Loader] --> P[SQLite Loader]
-    end
-    B -->|Runs| Ingestion Pipeline
-```
-
-This diagram provides an overview of the project's architecture, including the FastAPI application, its endpoints, and the services it interacts with.
