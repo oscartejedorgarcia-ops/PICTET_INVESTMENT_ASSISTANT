@@ -272,7 +272,7 @@ python -m app.services.pdf_loader ingest --force
 python -m app.services.pdf_loader ingest --file-path data/unstructured/report.pdf
 
 # Ingest a structured file (CSV/Excel)
-python -m app.services.csv_loader load --file-path data/structured/equities.xlsx
+python -m app.services.csv_loader data/structured/equities.xlsx
 
 # Check vector store stats
 python -m app.services.pdf_loader stats
