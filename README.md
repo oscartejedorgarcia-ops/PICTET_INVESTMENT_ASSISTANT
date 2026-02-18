@@ -386,9 +386,9 @@ curl -s -X POST http://localhost:8000/api/ask \
 1. **`.env.example` is empty** — the file exists but contains no content. The variables documented above are inferred from `app/config.py` and `app/ingestion/config.py`.
 2. **Default structured data file is `equities.xlsx`** — `app/config.py` sets `csv_path` to `data/structured/equities.xlsx`, not `data/stocks.csv` as the original README stated.
 3. **Ollama, not OpenAI** — `app/config.py` sets `ollama_base_url` and `app/services/llm.py` uses `api_key="unused"`. The `openai` Python package is used only as an HTTP client for the Ollama-compatible API.
-4. **Five ChromaDB collections total** — `ingest_text`, `ingest_tables`, `ingest_figures` (PDF pipeline) + `stocks_db_structure`, `stocks_taxonomy` (CSV pipeline). The original README mentioned 3.
-5. **Default DPI is 100**, not 200 as previously documented (`app/ingestion/config.py`).
-6. **Default chunk size is 450 chars / 50 overlap**, not 800/200 as previously documented.
+4. **Five ChromaDB collections total** — `ingest_text`, `ingest_tables`, `ingest_figures` (PDF pipeline) + `stocks_db_structure`, `stocks_taxonomy` (CSV pipeline).
+5. **Default DPI is 100**, (`app/ingestion/config.py`).
+6. **Default chunk size is 450 chars / 50 overlap**.
 
 ### Recommended improvements
 
