@@ -1,0 +1,41 @@
+# ── Core API ─────────────────────────────────────────────
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# ── LLM (used for text-to-SQL and answer synthesis) ──────
+openai==1.59.3
+
+# ── PDF parsing & OCR ────────────────────────────────────
+pymupdf==1.25.3
+pdfplumber==0.11.4
+easyocr==1.7.2
+Pillow>=10.0.0
+
+# ── Vector DB ────────────────────────────────────────────
+chromadb==0.6.3
+
+# ── Embeddings (open-source, local) ─────────────────────
+sentence-transformers>=3.0.0
+torch>=2.1.0
+
+# ── Chart-to-text & summarisation (optional, open-source)
+transformers>=4.40.0
+
+# ── Structured data ─────────────────────────────────────
+pandas==2.2.3
+openpyxl>=3.1.0
+
+# ── Compatibility ────────────────────────────────────────
+eval_type_backport>=0.2.0      # Pydantic + Python 3.9 union syntax
+
+# ── Testing ──────────────────────────────────────────────
+pytest>=8.0.0
+
+# ── Telemetry Fix ───────────────────────────────────────
+posthog>=3.0.0
+
+# ── Pip Upgrade ─────────────────────────────────────────
+pip>=26.0.1
