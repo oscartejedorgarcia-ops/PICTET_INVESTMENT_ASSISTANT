@@ -200,7 +200,7 @@ User question
 ### 7.2 Clone & create virtual environment
 
 ```bash
-git clone <repo-url> && cd Pictet_investment_assistant
+git clone https://github.com/oscartejedorgarcia-ops/PICTET_INVESTMENT_ASSISTANT && cd Pictet_investment_assistant
 python -m venv .venv
 source .venv/bin/activate
 ```
@@ -249,7 +249,7 @@ ollama pull llama3.2
 uvicorn app.main:app --reload
 ```
 
-**Option B — Docker Compose (Ollama + FastAPI):**
+**Option B (WIP) — Docker Compose (Ollama + FastAPI):**
 
 ```bash
 docker-compose up
@@ -270,6 +270,9 @@ python -m app.services.pdf_loader ingest --force
 
 # Ingest a single file
 python -m app.services.pdf_loader ingest --file-path data/unstructured/report.pdf
+
+# Ingest a structured file (CSV/Excel)
+python -m app.services.csv_loader load --file-path data/structured/equities.xlsx
 
 # Check vector store stats
 python -m app.services.pdf_loader stats
