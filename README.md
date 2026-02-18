@@ -293,7 +293,7 @@ Submit a research question. The assistant determines which data sources to query
 
 ```json
 {
-  "question": "What is the target price of Tesla, and how does it compare to current macroeconomic trends?"
+  "question": "What is the price of Accenture?"
 }
 ```
 
@@ -301,10 +301,10 @@ Submit a research question. The assistant determines which data sources to query
 
 ```json
 {
-  "answer": "The target price of Tesla is $35.20. According to the latest macroeconomic report…",
-  "sources_used": ["structured", "unstructured"],
-  "sql": "SELECT * FROM stocks WHERE company LIKE '%Tesla%'"
-}
+  "answer": "The current price of Accenture PLC is $266.50.",
+  "sources_used": ["structured"],
+  "sql": "SELECT price FROM stocks WHERE company = 'Accenture PLC'"
+}  
 ```
 
 ### `GET /api/health`
@@ -323,11 +323,10 @@ Returns service health and data-readiness status.
 
 | Question | Expected sources |
 |---|---|
-| "What is the dividend yield of Johnson & Johnson?" | structured |
-| "Which stocks in the Technology sector have the highest target price?" | structured |
+| "What is the price of Accenture?" | structured |
+| "Tell me company that has the highest price?" | structured |
 | "What are the current macroeconomic trends affecting markets?" | unstructured |
-| "What is the target price of Tesla, and how does it compare to current macro trends?" | structured + unstructured |
-| "Which healthcare stocks offer good value given the current macro outlook?" | structured + unstructured |
+| "What is the price of Tesla, and how does it compare to current macro trend?" | structured + unstructured |
 
 ---
 
