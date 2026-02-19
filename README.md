@@ -7,7 +7,6 @@ A GenAI-powered assistant that answers investment research questions by combinin
 - **RAG over PDFs** — full ingestion pipeline (text, tables, figures, charts) into ChromaDB with sentence-transformer embeddings.
 - **Text-to-SQL over equities data** — natural-language questions translated to SQL against a SQLite database, augmented by ChromaDB-stored column descriptions and taxonomy embeddings.
 - **Automatic query routing** — the LLM classifies every question as `structured`, `unstructured`, or both, then merges results before responding.
-- **Citations** — every retrieved chunk carries a citation (`source_file, page, exhibit_id`) that is included in prompt context.
 - **Fully local ingestion** — the entire PDF pipeline runs without external API calls (EasyOCR, sentence-transformers, DePlot, Flan-T5).
 
 ### In scope
@@ -396,6 +395,7 @@ curl -s -X POST http://localhost:8000/api/ask \
 - Optimize unstructured ingestion throughput: Vector graphics extraction is currently disabled to speed processing; reassess and re-enable selectively where it adds value.
 - Benchmark document-processing options: Run performance vs. quality comparisons across alternative PDF tools (e.g., Docling, Camelot) to choose the best stack for your document types.
 - Adopt task-specialized LLMs: Use different models for different tasks (e.g., SQL generation, summarization, routing) instead of relying only on Llama 3.2.
+- Increase chunk size from 450 chars (50 overlap) to ~2,000 chars with 10–20% overlap to preserve context and improve retrieval quality in finance documents.
 - Refactor for maintainability: Reduce unnecessary logging, improve module reusability, and tighten documentation/comments for cleaner long-term evolution.
 
 ---
