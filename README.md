@@ -396,6 +396,7 @@ curl -s -X POST http://localhost:8000/api/ask \
 - Benchmark document-processing options: Run performance vs. quality comparisons across alternative PDF tools (e.g., Docling, Camelot) to choose the best stack for your document types.
 - Adopt task-specialized LLMs: Use different models for different tasks (e.g., SQL generation, summarization, routing) instead of relying only on Llama 3.2.
 - Increase chunk size from 450 chars (50 overlap) to ~2,000 chars with 10–20% overlap to preserve context and improve retrieval quality in finance documents.
+- Complete and finalize the Docker configuration, which remains unfinished due to time constraints.
 - Refactor for maintainability: Reduce unnecessary logging, improve module reusability, and tighten documentation/comments for cleaner long-term evolution.
 
 ---
